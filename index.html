@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#081320" />
+  <meta name="description" content="MATDOG 체험에서 출발한 가상 로봇 자동 제어 실험실. 3D 시뮬레이션과 히스테리시스 알고리즘 비교." />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <title>MATDOG Virtual Lab | 로봇 자동 제어 실험실</title>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><div class="brand-mark">M<span>·</span></div><div><strong>MATDOG</strong><small>VIRTUAL LAB / 2026</small></div></div>
+      <div class="top-actions">
+        <span class="live-pill"><i></i> EDUCATIONAL SIMULATION</span>
+        <button id="reset-btn" class="button button-subtle" type="button">초기화</button>
+        <button id="fullscreen-btn" class="button button-outline" type="button">전체 화면 ↗</button>
+      </div>
+    </header>
+    <section class="intro">
+      <div>
+        <div class="eyebrow"><span class="eyebrow-bar"></span> PHYSICAL AI · CONTROL SYSTEMS</div>
+        <h1>로봇의 판단을 <em>설계하다.</em></h1>
+        <p>국립중앙과학관 MATDOG 체험을 확장한 3D 가상 제어 실험실. 센서 입력과 제어 알고리즘이 로봇의 행동을 어떻게 바꾸는지 직접 확인해 보세요.</p>
+      </div>
+      <div class="intro-card"><span>RESEARCH QUESTION</span><strong>센서값이 흔들릴 때,<br/>더 안정적인 제어는?</strong><small>단일 임계값 vs 히스테리시스</small></div>
+    </section>
+    <main>
+      <div class="dashboard">
+        <section class="panel stage-panel" aria-label="3D 로봇 시뮬레이터">
+          <div class="panel-head"><div><div class="kicker">01 / DIGITAL TWIN CONCEPT</div><h2>3D 로봇 시뮬레이터</h2></div><span class="head-tag">THREE.JS RENDERER</span></div>
+          <div class="scene-wrap" id="scene-wrap">
+            <div class="scene-label"><span class="scene-dot"></span> LIVE SIMULATION <span class="scene-sep">/</span> SCENE 01</div>
+            <div id="scene" role="img" aria-label="가상 사족보행 로봇이 신호등과 센서 입력에 반응하는 3D 장면"></div>
+            <div id="scene-error" class="scene-error" hidden>3D 그래픽을 표시할 수 없습니다. 실험 기능은 계속 사용할 수 있습니다.</div>
+            <div class="scene-hint">드래그: 회전 &nbsp;·&nbsp; 스크롤: 확대 / 축소</div>
+            <div class="scene-overlay"><small>LIVE TELEMETRY</small><strong id="scene-motion">STANDBY</strong><span id="scene-brightness">LIGHT SENSOR: 50%</span></div>
+          </div>
+          <div class="telemetry">
+            <div><span class="telemetry-label">신호 입력</span><strong id="telemetry-signal">● 빨간불</strong></div>
+            <div><span class="telemetry-label">로봇 상태</span><strong id="telemetry-motion">정지</strong></div>
+            <div><span class="telemetry-label">전면 조명</span><strong id="telemetry-light">OFF</strong></div>
+            <div><span class="telemetry-label">가상 이동 거리</span><strong id="telemetry-distance">0.0 m</strong></div>
+          </div>
+        </section>
+        <aside class="controls">
+          <section class="panel control-panel">
+            <div class="panel-head"><div><div class="kicker">02 / CONTROL INPUT</div><h2>가상 제어 패널</h2></div><span class="head-tag">MANUAL INPUT</span></div>
+            <div class="control-body">
+              <div class="control-section">
+                <div class="control-title"><strong>신호등</strong><span>가상 카메라 입력 대체</span></div>
+                <div class="signal-buttons" role="group" aria-label="신호등 색상 선택">
+                  <button class="signal-button active" type="button" data-signal="red" aria-pressed="true"><span class="signal-lamp red"></span>빨강</button>
+                  <button class="signal-button" type="button" data-signal="yellow" aria-pressed="false"><span class="signal-lamp yellow"></span>노랑</button>
+                  <button class="signal-button" type="button" data-signal="green" aria-pressed="false"><span class="signal-lamp green"></span>초록</button>
+                </div>
+                <p class="control-note">초록: 이동 / 빨강·노랑: 정지. 실제 영상 인식이 아닌 선택형 모의 입력입니다.</p>
+              </div>
+              <div class="control-section">
+                <div class="control-title"><strong>주변 밝기</strong><strong id="brightness-number" class="bright-number">50 <small>/ 100</small></strong></div>
+                <input id="brightness" type="range" min="0" max="100" step="1" value="50" aria-label="가상 주변 밝기" />
+                <div class="range-labels"><span>0 · 어두움</span><span>100 · 밝음</span></div>
+                <div class="sensor-indicator"><span><span class="indicator-led" id="indicator-led"></span> 전면 조명</span><strong id="lamp-state">OFF</strong></div>
+              </div>
+              <div class="control-section last">
+                <div class="control-title"><strong>실시간 조명 제어 방식</strong></div>
+                <label class="radio-card"><input type="radio" name="mode" value="single" checked /><span><strong>단일 임계값</strong><small>밝기 &lt;30 → ON / 그 외 OFF</small></span></label>
+                <label class="radio-card"><input type="radio" name="mode" value="hysteresis" /><span><strong>히스테리시스</strong><small>&lt;30 → ON / &gt;40 → OFF / 사이값 상태 유지</small></span></label>
+              </div>
+            </div>
+          </section>
+          <div class="insight-box"><span class="insight-symbol">↗</span><div><strong>왜 두 가지 기준이 필요할까?</strong><p>하나의 경계값만 사용하면 측정값이 조금 흔들려도 조명이 반복적으로 바뀔 수 있습니다. 히스테리시스는 이전 상태를 기억합니다.</p></div></div>
+        </aside>
+      </div>
+      <section class="panel research-panel" id="research">
+        <div class="panel-head research-head"><div><div class="kicker">03 / COMPARATIVE EXPERIMENT</div><h2>제어 알고리즘 비교 실험</h2><p>두 방식에 <b>완전히 동일한 센서 입력</b>과 초기 조명 OFF 상태를 적용합니다.</p></div><span class="head-tag">REPRODUCIBLE</span></div>
+        <div class="experiment-toolbar">
+          <div class="preset-control"><label for="preset">가상 센서 실험 조건</label><select id="preset"><option value="jitter">임계값 근처의 흔들림</option><option value="gradual">점차 어두워졌다 밝아짐</option><option value="noisy">넓은 범위의 센서 오차</option></select></div>
+          <div class="experiment-actions"><button id="run-btn" type="button" class="button button-primary">▶ 비교 실험 실행</button><button id="csv-btn" type="button" class="button button-outline" disabled>CSV 다운로드 ↓</button></div>
+        </div>
+        <div class="experiment-results" id="results" aria-live="polite">
+          <div class="empty-state"><span class="empty-icon">◎</span><h3>실험 조건을 선택하고 실행하세요</h3><p>동일한 밝기 입력에 대한 두 방식의 조명 전환 횟수를 정량적으로 비교합니다.</p></div>
+        </div>
+      </section>
+    </main>
+    <footer><div><strong>MATDOG VIRTUAL LAB</strong><span>Made as an educational follow-up to the 2026 One-Day AI Class.</span></div><p>⚠ 실제 MATDOG와 통신하지 않는 교육용 시뮬레이터입니다. 물리·센서 측정값이 아닌 가상 입력을 사용합니다.</p></footer>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
